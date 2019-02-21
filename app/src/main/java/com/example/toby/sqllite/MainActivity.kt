@@ -9,8 +9,9 @@ import android.database.Cursor
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity(), View.OnClickListener {
+class MainActivity : AppCompatActivity() {
 
 
 
@@ -33,19 +34,24 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         editTextArtist = findViewById(R.id.etArtist)
         editTextYear = findViewById(R.id.etYear)
 
-        buttonAdd = findViewById(R.id.btnAdd)
+
         buttonSearch = findViewById(R.id.btnSearch)
         buttonUpdate = findViewById(R.id.btnUpdate)
         buttonDelete = findViewById(R.id.btnDelete)
 
-        buttonAdd.setOnClickListener{
-        var id = editTextID
-        var t = editTextTitle
-        var a = editTextArtist
-        var y = editTextYear
+        val id = etID.text.toString()
+        val ID = Integer.parseInt(id)
 
-            var ins = MyHelper()
-            ins.insertRecord = (id, a, t, y)
+        val a = etArtist.text.toString()
+
+        val t = etTitle.text.toString()
+
+        val y = etYear.text.toString()
+
+        btnAdd.setOnClickListener{
+
+            var ins = MyHelper(this)
+            ins.insertRecord (ID, a, t, y)
 
 
         }
@@ -67,12 +73,10 @@ class MyHelper(ctx:Context) : SQLiteOpenHelper(ctx,"TestDB", null, 1) {
         onCreate(db)
     }
 
-    fun insertRecord() : Long{
+    fun insertRecord( ID: Int, a: String,  t: String,  y: String) : Long{
         val db = getWritableDatabase()
-        val stmt = db.compileStatement ("INSERT INTO Songs(ID,Title,Artist,Year) VALUES (?, ?, ?,?)");
-        stmt.bindString (1, ())
-        stmt.bindString (2, "Smith")
-        stmt.bindLong (3, 53)
+        val stmt = db.compileStatement ("INSERT INTO Songs(ID,Title,Artist,Year) VALUES (id, t, a, y)");
+
         val id = stmt.executeInsert()
         return id
     }
